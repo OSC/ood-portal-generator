@@ -6,7 +6,7 @@ PREFIX  ||= ENV['PREFIX']  || '/opt/rh/httpd24/root/etc/httpd/conf.d'
 SRCDIR  ||= ENV['SRCDIR']  || 'templates'
 OBJDIR  ||= ENV['OBJDIR']  || 'build'
 OBJFILE ||= ENV['OBJFILE'] || 'ood-portal.conf'
-CNFFILE ||= ENV['CNFFILE'] || 'config.yml'
+CNFFILE ||= ENV['CNFFILE'] || '/etc/ood/config/ood-portal.yml'
 
 class OodPortalGenerator
   def initialize(opts = {})
@@ -88,8 +88,14 @@ desc "Render the Apache config file"
 file "#{OBJDIR}/#{OBJFILE}" => ["#{SRCDIR}/#{OBJFILE}.erb", OBJDIR, (CNFFILE if File.file?(CNFFILE))].compact do |task|
   source = task.prerequisites.first
   target = task.name
-  puts "rendering #{source} => #{target}"
-  portal_config = File.file?(CNFFILE) ? YAML.load_file(CNFFILE) : {}
+  portal_config = {}
+  if File.file?(CNFFILE)
+    puts "Using configuration file '#{CNFFILE}'"
+    portal_config = YAML.load_file(CNFFILE)
+  else
+    puts "Configuration file '#{CNFFILE}' does not exist, using defaults"
+  end
+  puts "Rendering #{source} => #{target}"
   portal = OodPortalGenerator.new(portal_config)
   File.open(target, 'w') { |f| f.write(portal.render(File.read(source))) }
 end
