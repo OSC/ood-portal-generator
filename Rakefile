@@ -1,12 +1,9 @@
-require 'yaml'
-require 'erb'
-
 # Build options
-PREFIX  ||= ENV['PREFIX']  || '/opt/rh/httpd24/root/etc/httpd/conf.d'
-SRCDIR  ||= ENV['SRCDIR']  || 'templates'
-OBJDIR  ||= ENV['OBJDIR']  || 'build'
-OBJFILE ||= ENV['OBJFILE'] || 'ood-portal.conf'
-CNFFILE ||= ENV['CNFFILE'] || '/etc/ood/config/ood-portal.yml'
+PREFIX  = ENV['PREFIX']  || '/opt/rh/httpd24/root/etc/httpd/conf.d'
+SRCDIR  = ENV['SRCDIR']  || 'templates'
+OBJDIR  = ENV['OBJDIR']  || 'build'
+OBJFILE = ENV['OBJFILE'] || 'ood-portal.conf'
+CNFFILE = ENV['CNFFILE'] || '/etc/ood/config/ood-portal.yml'
 
 #
 # Tasks
