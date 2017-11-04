@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+
+require "optparse"
+require "pathname"
+require "yaml"
+require "ood_portal_generator"
+
+# This will hold the options we parse
+options = {
+  config: "/etc/ood/config/ood_portal.yml",
+  template: Pathname.new(__dir__).join("..", "templates", "ood-portal.conf.erb"),
+  output: "-",
+}
+
+OptionParser.new do |parser|
+  parser.banner = "Usage: generate [options]"
+
+  parser.on("-c", "--config CONFIG", String, "# YAML configuration file used as context for template.", "# Default: #{options[:config]}") do |v|
+    options[:config] = v
+  end
+
+  parser.on("-t", "--template TEMPLATE", String, "# ERB template that output is generated from.", "# Default: #{options[:template]}") do |v|
+    options[:template] = v
+  end
+
+  parser.on("-o", "--output OUTPUT", String, "# File that generated content is output to.", "# Default: #{options[:output]}") do |v|
+    options[:output] = v
+  end
+
+  parser.on("-v", "--version", "# Print current version") do
+    puts "version #{OodPortalGenerator::VERSION}"
+    exit
+  end
+
+  parser.on("-h", "--help", "# Show this help message") do
+    puts parser
+    exit
+  end
+end.parse!
+
+config_path = Pathname.new(options[:config])
+config_hash = config_path.file? ? YAML.load_file(config_path) : {}
+
+portal = OodPortalGenerator.new(config_hash)
+result = portal.render(Pathname.new(options[:template]).read)
+if options[:output] == "-"
+  puts portal.render(Pathname.new(options[:template]).read)
+else
+  File.open(options[:output], "w") { |f| f.write(result) }
+end
