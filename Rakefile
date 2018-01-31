@@ -3,7 +3,7 @@ PREFIX  = ENV['PREFIX']  || '/opt/rh/httpd24/root/etc/httpd/conf.d'
 SRCDIR  = ENV['SRCDIR']  || 'templates'
 OBJDIR  = ENV['OBJDIR']  || 'build'
 OBJFILE = ENV['OBJFILE'] || 'ood-portal.conf'
-CNFFILE = ENV['CNFFILE'] || '/etc/ood/config/ood-portal.yml'
+CNFFILE = ENV['CNFFILE'] || 'config.yml'
 
 #
 # Tasks
