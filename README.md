@@ -1,3 +1,5 @@
+## Moved to https://github.com/OSC/ondemand/tree/master/ood-portal-generator
+
 # ood-portal-generator
 
 ![GitHub Release](https://img.shields.io/github/release/osc/ood-portal-generator.svg)
